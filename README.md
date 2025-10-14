@@ -39,7 +39,7 @@ np.mean(np.abs(np.diff(np.diff(logit))))
 ```
 
 • From The Code formula, ```
-numpy.mean()``` is used to calculate mean on logits itself. 
+numpy.mean()``` is used to calculate mean on logits itself directly. While For ```numpy.abs()``` itself is to turn each scalar inside the list to be an absolute value, so double differential scaling will be much easier and precisely accurate, the double ```numpy.diff()``` is used to calculate the differential value of each scalar inside that logit, double usage here is used to achieve precision higher.
 
 
 
