@@ -40,3 +40,8 @@ Curvature Is Used to calculate the geometry curve of the logits and Nested Simul
 
 FolderNet is A MLP (Multi Layer perceptron) Neural Network That Used Chain_algorithm, forward_algorithm, and tune_algorithm, to dynamically shift and refine logits before activations, this feedback loop creates a shifting nonlinear process that were constantly self correcting and self adjusting. 
 
+
+# EpsitronTransformer Class
+
+Epsitron is A Custom Transformer meant to Make Agents Adaptive To All environments, both Noisy And Silent, Epsitrons Modules or functions acts as both Linear attention For Agent and Non Linear attention with Meta convergence and multi Matrix Calculation to Achieve convergence faster than regular Transformer.
+
