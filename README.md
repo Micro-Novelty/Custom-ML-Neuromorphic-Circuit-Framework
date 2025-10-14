@@ -21,7 +21,9 @@ The Mathematical Formula That Acts as A Foundation for Nonlinear dynamic equilib
 1. KL Divergence is Used To Calculate sensitivity on How much the Logit is shifting from uniform logit.
 Formula:
 
+```math
 D'_{KL}(x) = \sum (x \log x - \log \text{uniform})
+```
 
 
 
