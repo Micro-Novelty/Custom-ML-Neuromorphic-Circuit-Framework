@@ -1,6 +1,6 @@
 # Custom-Transformer-For-ML-Framework
 This Repository Is Private For Now, Since This Framework Was Purely Custom Made by me And I Have conducted some test of It, although, This repository contains the Whole Block of FolderNet, Epsitron Transformer, And EpsilonPolicy
-Creater = X.11 (AstroVont)
+Creater = X.11 (Jefrinton Ernandes)
 
 # Mathematical Foundation And Expression
 
