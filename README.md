@@ -55,3 +55,8 @@ FolderNet is A MLP (Multi Layer perceptron) Neural Network That Used Chain_algor
 
 Epsitron is A Custom Transformer meant to Make Agents Adaptive To All environments, both Noisy And Silent, Epsitrons Modules or functions acts as both Linear attention For Agent and Non Linear attention with Meta convergence and multi Matrix Calculation to Achieve convergence faster than regular Transformer.
 
+
+# LaFoldBot Class
+
+LaFoldBot is A Custom Meta-Helper that helps to Automate And Refined Logits, It Acts As A Coordinator to Supervised Logits or Probabilities, its presence acts like a backbone helper for FolderNet To Help FolderNet Refines its logits.
+
