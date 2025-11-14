@@ -1,4 +1,4 @@
-# Custom-Transformer-For-ML-Framework
+# Custom-ML-Framework
 This Framework Was Purely Custom Made by me And I Have conducted some analytical test of It (lyapunov stability test, exploration vs exploitation), although, This repository contains the Whole Block of cellularNet, Epsitron Transformer, And EpsilonPolicy, Hope you understand the rigorous math. :)
 Creator = Anonimity X.11.
 
