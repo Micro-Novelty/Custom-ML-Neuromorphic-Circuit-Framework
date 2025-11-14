@@ -1,0 +1,1545 @@
+class CellularImbrium:
+	def __init__(self, mutation_point, lagrange_multipliers, distribution_eff):
+		self.mutation = mutation_point
+		self.multipliers = lagrange_multipliers 
+		self.bias = distribution_eff
+		self.net1_eff = 0.1
+		self.net_equilibrium = lagrange_multipliers / 1.0 + distribution_eff
+		self.satisfiability = 1.5
+
+
+	def cellular_mind(self, x, children1, func, nodes,total_input):	
+					    
+		class Node:
+			def __init__(self, outer):
+				self.outer = outer
+				self.node_satisfiability = 0.01
+				self.lr = 0.05
+				self.weights = []
+				self.biases = []				
+				self.input_size = 5
+				self.output_size = 5
+				self.hidden_size = [156, 356, 256, 126, 80]			 
+				self.layer_sizes = [self.input_size] + self.hidden_size + [self.output_size]
+				self.stability = 0.01
+				self.index = [0.1, 0.5, 1, 1.5, 2]
+				self.alpha = 0.5
+				self.beta = 0.25		
+								
+				for i in range(len(self.layer_sizes) - 1):
+				     w = np.random.randn(self.layer_sizes[i], self.layer_sizes[i+1]) * np.sqrt(2. / self.layer_sizes[i])
+				     b = np.zeros((1, self.layer_sizes[i+1]))
+				     self.weights.append(w)
+				     self.biases.append(b)
+				     
+			def leaky_relu(self, x,  alpha=None):			
+			     return np.where(x > 0, x, alpha * x)
+			     
+			def leaky_relu_derivative(self, x,alpha=0.01):
+				return np.where(x > 0, 1, alpha)	
+				
+												
+			def master_node_softmax(self):
+
+				x = self.x.copy()
+				constant = 0.005
+				uniform = np.ones_like(x)
+				
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1.0 - curvature)
+				
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+				leaky_noise = self.implicit_noise()
+
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * evaluate / (1/2 * multipliers) 							
+				concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 	
+								
+				equilibrium_nodes = np.dot(x, concluded_equilibrium)
+				mutation_nodes = np.dot(x, mutation)
+				multipliers_nodes = np.dot(leaky_noise, multipliers)
+				all_nodes = equilibrium_nodes + multipliers_nodes - mutation_nodes 
+				planner_nodes = all_nodes / multipliers + (mutation - concluded_equilibrium)
+				nodes_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(planner_nodes))
+				
+				reemerging_hive_probs = sigmoid / sigmoid - np.exp(np.log1p(-curvature))	
+				hive_safety_probs = net_multipliers * bias / reemerging_hive_probs + (mutation - concluded_equilibrium)
+				cellular_hive_grows = net_multipliers * hive_safety_probs / (1.0 + planner_nodes) - kl_div
+				
+				first_curve = np.mean(np.abs(np.diff(np.diff(equilibrium_nodes))))
+				sec_curve = np.mean(np.abs(np.diff(np.diff(mutation_nodes))))	
+				third_curve = np.mean(np.abs(np.diff(np.diff(multipliers_nodes))))	
+				planner_curve = np.mean(np.abs(np.diff(np.diff(planner_nodes))))
+				all_curves = first_curve + sec_curve + third_curve * planner_curve / 1.0 + curvature 
+				
+				efficient_kl = nodes_div / 1.0 + kl_div
+				kl_curve = efficient_kl / 1.0 - all_curves
+				div_manifold = nodes_div / concluded_equilibrium  + kl_curve 
+				dynamic_seeking = efficient_kl * net_multipliers / 1.0 + (net_multipliers - concluded_equilibrium)
+				conv_guaranteed = sigmoid / 1.0 - dynamic_efficiency 
+				div_guaranteed = efficient_kl * bias / 1.0 + dynamic_efficiency
+				div_completeness = div_manifold / 1.0 + (div_guaranteed - conv_guaranteed)
+				concluded_probs_of_slope = dynamic_efficiency / div_guaranteed + (div_completeness - bias)
+				entropy_loss = dynamic_seeking / (div_completeness + concluded_probs_of_slope) - conv_guaranteed
+				turing_efficiency = div_completeness / (1.0 +  conv_guaranteed) - entropy_loss
+				stability_guaranteed = dynamic_seeking / turing_efficiency + (1.0 - concluded_probs_of_slope)
+				equilibrium = stability_guaranteed / 1.0 + turing_efficiency
+				
+				refined = np.dot(planner_nodes, equilibrium)
+				refined /= turing_efficiency 
+				refined /= concluded_probs_of_slope
+				refined /= (1.0 + div_completeness) - conv_guaranteed 	
+				
+				if np.isnan(refined).any() or not np.isfinite(refined).any():
+					refined = np.ones_like(refined)
+					
+				return refined			
+				
+				
+			def cellular_optimum_algorithm(self, inputs):
+				x = inputs
+				soft = self.master_node_softmax()
+				constant = 0.005
+				uniform = np.ones_like(x)
+				
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1.0 - curvature)
+				
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * evaluate / (1/2 * multipliers) 							
+				concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 	
+								
+				first_linear = np.dot(x, concluded_equilibrium)
+				sec_linear = np.dot(soft, concluded_equilibrium)
+				all_linears = first_linear + sec_linear 
+				planner_linears = all_linears * 2 / kl_div		
+				planner_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(planner_linears))
+				planner_div = sigmoid + np.log1p(planner_div)
+				
+				conv_loss = planner_linears / (1.0 + sigmoid) - concluded_equilibrium
+				plan_conv_div = np.sum(planner_linears * np.log(np.clip(planner_linears, 1e-8, None)) - np.log(conv_loss))
+				plan_conv_div = sigmoid + np.log1p(plan_conv_div)
+				
+				first_curve = np.mean(np.abs(np.diff(np.diff(first_linear ))))
+				sec_curve = np.mean(np.abs(np.diff(np.diff(sec_linear))))	
+				third_curve = np.mean(np.abs(np.diff(np.diff(conv_loss))))
+				eff_curves = first_curve * third_curve / sec_curve + (1.0 - curvature)
+				
+				efficient_kl = planner_div / plan_conv_div - kl_div
+				kl_curve = efficient_kl / 1.0 - eff_curves
+				div_manifold = planner_div / 1.0 + kl_curve - concluded_equilibrium
+				dynamic_efficiency = efficient_kl * net_multipliers / 1.0 + (net_multipliers - concluded_equilibrium)
+				conv_guaranteed = sigmoid / 1.0 - dynamic_efficiency 
+				div_guaranteed = efficient_kl * bias / 1.0 + dynamic_efficiency
+				div_completeness = div_manifold / 1.0 + (div_guaranteed - conv_guaranteed)
+				concluded_probs_of_slope = dynamic_efficiency / div_guaranteed + (div_completeness - bias)
+				projected = concluded_probs_of_slope / div_completeness + concluded_equilibrium
+				
+				refined = np.dot(planner_linears, projected)
+				
+				if np.isnan(refined).any() or not np.isfinite(refined).any():
+					refined = np.ones_like(refined)
+					
+				return refined
+								
+												
+			def networking_layer_perceptron(self, logit):
+				x = logit
+				constant = 0.005
+				uniform = np.ones_like(x)
+				
+				self.activations = []
+				self.network_noise = []
+				
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1.0 - curvature)
+				
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * bias / (1/2 * multipliers) 							
+				concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 	
+				
+				meta_learn = np.dot(x, concluded_equilibrium)
+				planner_learn = meta_learn * 2 / kl_div
+				planner_conv = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				planner_conv = sigmoid + np.log1p(planner_conv)
+				
+				first_curve = np.mean(np.abs(np.diff(np.diff(meta_learn))))
+				sec_curve = np.mean(np.abs(np.diff(np.diff(planner_learn))))
+				all_curves = 1/137 + sec_curve / 1.0 + (first_curve - curvature )
+				
+				efficient_kl = planner_conv / 1.0 + kl_div
+				kl_curve = efficient_kl / 1.0 - efficient_kl
+				div_manifold = planner_conv / all_curves - concluded_equilibrium 
+				dynamic_efficiency = efficient_kl * net_multipliers / net_multipliers + (1.0 - div_manifold)
+				
+				refined = np.dot(planner_learn, dynamic_efficiency)
+				if np.isnan(refined).any() or not np.isfinite(refined).any():
+					refined = np.ones_like(refined)
+					
+				self.activations.append(refined)
+				for i in range(len(self.weights) - 1):
+					  z = np.dot(self.activations[-1], self.weights[i]) + self.biases[i]					  
+					  z = np.nan_to_num(z, nan=0.0, posinf=0.0, neginf=0.0)  		  
+					  
+					  a = self.leaky_relu(z, alpha=self.stability)
+					  self.network_noise.append(z)
+					  self.activations.append(a)
+					  
+					  
+				z = np.dot(self.activations[-1], self.weights[-1]) + self.biases[-1]
+
+				a = self.outer.lagrange_point_net(x, refined, z)
+				
+				if np.isnan(a).any() or not np.isfinite(a).any():
+					  a = np.ones_like(a) / len(a)
+					  
+				self.network_noise.append(z)
+				self.activations.append(a)    
+								
+				return a
+				
+
+
+			def extract_features(self):
+				try:
+					equilibrium = self.outer.net_equilibrium
+					bias = self.outer.bias	
+					multipliers = self.outer.multipliers 
+					mutation = self.outer.mutation 
+					node_satisfied = self.node_satisfiability 
+					feature_vector = np.array([equilibrium, bias, multipliers, mutation, node_satisfied], dtype=np.float32)
+					return feature_vector
+				except Exception as e:
+					print("error", e)
+					return False
+					
+			def cellular_choose(self):
+				inputs = np.array([self.extract_features() for i in range(len((self.index)))])
+				score = self.cellular_optimum_algorithm(inputs)
+				index = np.argmax(score)
+				return self.index[index], index
+			
+			def train_cellular(self, index):
+			    extract = self.extract_features()  
+			    chosen_reward = self.outer.net_equilibrium
+			    extract = np.array(extract, dtype=np.float32)
+			    extract = (extract - np.mean(extract)) / (np.std(extract) + 1e-8)
+			    shaped_rewards = extract * 0.1  
+			    shaped_rewards[index] = chosen_reward  
+			    shaped_rewards -= np.mean(shaped_rewards)
+			    shaped_rewards /= (np.std(shaped_rewards) + 1e-8)
+			    shaped_rewards = np.clip(shaped_rewards, -2.0, 2.0)
+			    inputs = np.array([self.extract_features()], dtype=np.float32)
+			    targets = shaped_rewards.reshape(1, -1).astype(np.float32)
+			    self.cellular_train(inputs, targets)			
+												
+			def run(self):				
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+				node_satisfied = self.node_satisfiability 
+				choose, num = self.cellular_choose()	
+							
+				net_equilibrium = mutation * bias / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * net1_eff / (multipliers + 1.0) - bias
+				stability_multipliers = net_multipliers * bias / mutation - net1_eff
+				conclusion_global_stability = stability_multipliers *node_satisfied / 1.0 + (mutation - net_equilibrium)
+								
+				self.outer.mutation = 1.0 + choose
+				self.outer.multipliers = 1.0 + choose
+				self.outer.bias = 1.0 + choose	
+				self.stability = choose		
+				self.node_satisfiability = net_equilibrium + choose / num + (1.0 - mutation)
+								
+								
+				if conclusion_global_stability > self.outer.satisfiability:
+					print("Stability Guaranteed")
+					action, index = self.cellular_choose()
+					self.train_cellular(index)
+					return True
+				else:
+					print("Global Stability Unsatisfied")
+					return False		
+					
+									
+		def cellular_train(self, X, Y):
+		        entropy_coef = 0.075
+		        value_coef = 0.25
+		        policy_soft = self.networking_layer_perceptron(X)
+		        policy_tune = self.main.networking_layer_perceptron(policy_soft)
+		        all_policy = policy_soft + policy_tune 
+		        output = self.master_node_softmax(all_policy)
+		     
+		        output = np.nan_to_num(output, nan=0.0, posinf=0.0, neginf=0.0)
+		        raw_curve = 0.05 + np.mean(np.abs(np.diff(np.diff(output))))
+		        uniform = np.ones_like(output) / len(output)
+		     
+		        kl_div= np.sum(output * np.log(np.clip(output,1e-8, None) - np.log(uniform)))
+		        kl_divergence = 0.05 + np.log1p(kl_div)
+		        sigmoid = 1.0 / (1 - raw_curve)
+		        
+		        equilibrium = self.outer.net_equilibrium		        
+		        net1_eff = self.outer.net1_eff		
+		        multipliers = self.outer.multipliers 
+		        mutation = self.outer.mutation 
+		        bias = self.outer.bias 
+		        leaky_noise = self.implicit_noise(X)
+		        
+		        net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)		        
+		        net_multipliers = (1.0 + net_equilibrium) * evaluate / (1/2 * multipliers)
+		        concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 	
+		        
+		        equilibrium_nodes = np.dot(X, concluded_equilibrium)
+		        mutation_nodes = np.dot(X, mutation)
+		        multipliers_nodes = np.dot(leaky_noise, multipliers)
+		        all_nodes = equilibrium_nodes + multipliers_nodes - mutation_nodes 
+		        
+		        planner_nodes = all_nodes / multipliers + (mutation - concluded_equilibrium)
+		        nodes_div = np.sum(X * np.log(np.clip(X, 1e-8, None)) - np.log(planner_nodes))
+		        
+		        first_curve = np.mean(np.abs(np.diff(np.diff(equilibrium_nodes))))
+		        sec_curve = np.mean(np.abs(np.diff(np.diff(mutation_nodes))))
+		        third_curve = np.mean(np.abs(np.diff(np.diff(multipliers_nodes))))	
+		        planner_curve = np.mean(np.abs(np.diff(np.diff(planner_nodes))))
+		        eff_curves = first_curve * third_curve / sec_curve + (1.0 - raw_curve)
+		        
+		        efficient_kl = nodes_div / 1.0 + kl_div
+		        kl_curve = efficient_kl / 1.0 - eff_curves
+		        div_manifold = nodes_div / 1.0 + kl_curves
+		        equilibrium = (1.0 + multipliers_nodes) - net1_eff / div_manifold 											
+						        		        
+		        advantages = np.tanh((Y - policy_tune) / (np.std(Y - policy_tune) + 1e-8)) / equilibrium
+		        log_soft = np.log(np.clip(policy_soft, 1e-8, 1.0))
+		        log_tune = np.log(np.clip(policy_tune, 1e-8, 1.0))
+		        
+		        loss_soft = -np.mean(np.sum(log_soft * advantages, axis=1) / 1.0 + multipliers)
+		        loss_tune = -np.mean(np.sum(log_tune * advantages, axis=1) / (1.0 + net1_eff) - mutation )
+		        
+		        entropy = -np.mean(np.sum(policy_soft * log_soft, axis=1) - np.log(uniform))
+		        max_entropy = sigmoid + np.log(policy_soft.shape[1])
+		        entropy_norm = (1.0 + entropy) / max_entropy
+		        weight = np.sum(X) / entropy_norm
+		        	        
+		        stability_weight = weight * net1_eff / (1.0 - entropy_norm)
+		        adaptivity_weight = weight * entropy_norm / 1.0 + equilibrium 
+		        policy_loss = stability_weight * net1_eff + bias / sigmoid +stability_weight * loss_soft + adaptivity_weight * loss_tune 
+		        value_loss = np.mean((policy_tune - Y) ** 2) / 1.0 - equilibrium
+		        
+		        target_entropy = 0.6 * max_entropy / 1.0 - entropy_norm
+		        entropy_stability = (entropy - target_entropy) ** 2 / 1.0 + mutation - equilibrium		        
+		        
+		        entropy_adaptivity = adaptivity_weight / kl_curve
+		        loss = weight + policy_loss + value_coef * value_loss + self.beta * entropy_stability - self.alpha * entropy_adaptivity 
+		        d_policy = policy_loss - Y / efficient_kl_descent - (1.0 + mutation)
+		        
+		        d_value  = 2 * (policy_tune - Y) / 1.0 + equilibrium
+		        d_entropy = -(np.log(np.clip(loss, 1e-8, 1.0)) + 1)
+		        deltas = [d_policy + value_coef * d_value - entropy_coef * d_entropy / net1_equilibrium]
+		        for i in reversed(range(len(self.weights) - 1)):
+		        	dz = deltas[0].dot(self.weights[i + 1].T) * self.leaky_relu_derivative(self.zs[i], alpha=0.01)
+		        	deltas.insert(0, dz)
+		        for i in range(len(self.weights)):
+		        	dw = self.activations[i].T.dot(deltas[i]) / X.shape[0]
+		        	db = np.sum(deltas[i], axis=0, keepdims=True) / X.shape[0]
+		        	norm = np.linalg.norm(dw)
+		        	if norm > 200:
+		        		dw = dw * (200 / norm)
+		        	norm_b = np.linalg.norm(db)
+		        	if norm_b > clip_value:
+		        		db = db * (clip_value / norm_b)
+		        self.weights[i] -= self.lr * dw
+		        self.biases[i]  -= self.lr * db
+		        self.weights[i] = np.nan_to_num(self.weights[i], nan=0.0, posinf=clip_value, neginf=-clip_value)
+		        self.biases[i]  = np.nan_to_num(self.biases[i], nan=0.0, posinf=clip_value, neginf=-clip_value)
+
+
+							
+		class SequencialReplanner(Node):
+			def __init__(self, outer, children):
+				super().__init__(outer)		
+				self.bias = self.outer.bias
+				self.children = children
+				self.x = x
+				
+			def conclusion_planner(self):
+				x = self.x.copy()
+				constant = 0.005
+				uniform = np.ones_like(x)
+			
+															
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1 - curvature)
+				
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+				
+				alpha1 = np.dot(x, multipliers)
+				alpha2 = np.dot(x, mutation)
+				alpha3 = np.dot(x, equilibrium)	
+							
+				trA1 = np.linalg.norm(alpha1)
+				trA2 = np.linalg.norm(alpha2)
+				trA3 = np.linalg.norm(alpha3)	
+				s1 = trA1**2 - trA3 / equilibrium
+				s2 = (1/2) * (trA2**3 + trA3** 2  / equilibrium)				
+				s3 = (1/6) * (trA3**3 - (3 * trA1 * trA2**2) + (2 * trA3**3) / (3 * trA3**3) / equilibrium)
+				all_sample_scores = (1.0 + s1 + s3 / s3 + s2 - s1)														
+				net_equilibrium = mutation * bias / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * net1_eff / (multipliers+ 1.0) - curvature					
+				conclusion = net_multipliers * all_sample_scores / net_multipliers + net_equilibrium 
+				score = conclusion + mutation / 1.0 + net1_eff
+				
+				return score
+				
+			def lyapunov_stability(self, evaluate):
+				x = self.extract_features()
+				constant = 0.005
+				uniform = np.ones_like(x)
+				
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1 - curvature)
+				
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * evaluate / (1/2 * multipliers) 
+				
+				equilibrium_reachability = net_equilibrium / 1.0 - evaluate
+				guaranteed_reachability = net_multipliers * bias / 1.0 + equilibrium_reachability
+				technical_satisfiability = guaranteed_reachability * equilibrium / 1.0 + equilibrium_reachability 
+				satisfiability_reachable = 1.0 + technical_satisfiability * net1_eff / (1.0 + equilibrium_reachability) 
+				
+				return satisfiability_reachable				
+																								
+			def run(self):
+				active = False
+				
+				evaluate = self.conclusion_planner()			
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 				
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * evaluate / (1/2 * multipliers) 
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)				
+				concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 	
+												
+				if evaluate < concluded_equilibrium:
+					stabilization = self.lyapunov_stability(evaluate)
+					if stabilization >= self.outer.satisfiability:
+						return active
+					else:
+						print("Nodes Degrading..")
+						self.outer.satisfiability -= 0.001
+						return False						
+				else:
+					scores = (1.0 + evaluate) - bias / 1.0 - net_multipliers
+					self.outer.satisfiability = scores									
+					for child in self.children:
+						if not child.run():
+							return False				
+						return True
+					
+		class SpecialNodes(Node):
+			def __init__(self, outer, x, nodes):
+				super().__init__(outer)								
+				self.x = x
+				self.nodes = nodes
+
+			def cellular_special_nodes(self):
+							
+				x = self.x.copy()
+				constant = 0.005
+				uniform = np.ones_like(x)
+					
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				geometric_nodes = self.nodes
+
+											
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1 - curvature)
+				
+				net_equilibrium = mutation * geometric_nodes / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * geometric_nodes / (1/2 * multipliers) 									
+				concluded_equilibrium = net_multipliers * geometric_nodes / mutation + (multipliers - net1_eff)
+				evenly_spreading = net_multipliers + (multipliers - mutation ) / multipliers - (1/2 * net1_eff)
+				equilibrium_of_spread = evenly_spreading * geometric_nodes / (1.0 + concluded_equilibrium) - net1_eff
+				equilibrium_of_nodes = geometric_nodes * (multipliers - mutation) / 1.0 + equilibrium_of_spread
+				
+				alpha1 = np.dot(x, equilibrium_of_nodes)
+				alpha2 = np.dot(x, evenly_spreading)
+				alpha3 = np.dot(x, equilibrium_of_spread)	
+							
+				trA1 = np.linalg.norm(alpha1)
+				trA2 = np.linalg.norm(alpha2)
+				trA3 = np.linalg.norm(alpha3)	
+				s1 = trA1**2 - trA3 / equilibrium_of_nodes
+				s2 = (1/2) * (trA2**3 + trA3** 2  / equilibrium_of_nodes)
+				s3 = (1/6) * (trA3**3 - (3 * trA1 * trA2**2) + (2 * trA3**3) / (3 * trA3**3) / equilibrium_of_nodes)
+				
+				special_nodes = list((s1, s2, s3))				
+										
+				return special_nodes
+
+							
+		class HiveNodes(Node):
+			def __init__(self, outer, x, func):
+				super().__init__(outer)
+				self.nodes = nodes
+				self.special_nodes = SpecialNodes(self.outer, x, nodes)
+				self.main = Node(self.outer)
+				self.func = func
+				self.lr = 0.003
+				self.weights = []
+				self.biases = []
+				self.input_size = 5
+				self.output_size = 5
+				self.hidden_sizes = [246, 156, 80]   
+				self.layer_sizes = [self.input_size] + self.hidden_sizes +[self.output_size]
+				self.index = [0.1, 0.5, 1, 1.5, 2]		
+				self.alpha = 0.5
+				self.beta = 0.25		
+				
+				for i in range(len(self.layer_sizes) - 1):
+				     w = np.random.randn(self.layer_sizes[i], self.layer_sizes[i+1]) * np.sqrt(2. / self.layer_sizes[i])
+				     b = np.zeros((1, self.layer_sizes[i+1]))
+				     self.weights.append(w)
+				     self.biases.append(b)
+				     
+			def leaky_relu(self, x, alpha=0.01):			   
+			     return np.where(x > 0, x, alpha * x)
+			     
+			def leaky_relu_derivative(self, x,alpha=0.01):
+				return np.where(x > 0, 1, alpha)				     
+				
+			def implicit_noise(self, x):				
+				constant = 0.005				
+				noise = np.std(x) / np.mean(x)				
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1.0 - curvature)
+				
+				noises = np.random.uniform(0, 1e-3 * sigmoid, size=x.shape)
+				noises /= curvature	
+				
+				return noises	
+
+			def lyapunov_stability(self, evaluate):
+				x = self.extract_features()
+				constant = 0.005
+				uniform = np.ones_like(x)
+				
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1 - curvature)
+				
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * evaluate / (1/2 * multipliers) 
+				
+				equilibrium_reachability = net_equilibrium / 1.0 - evaluate
+				guaranteed_reachability = net_multipliers * bias / 1.0 + equilibrium_reachability
+				technical_satisfiability = guaranteed_reachability * equilibrium / 1.0 + equilibrium_reachability 
+				satisfiability_reachable = 1.0 + technical_satisfiability * net1_eff / (1.0 + equilibrium_reachability) 
+				
+				return satisfiability_reachable				
+												
+			def cellular_softmax(self, x):
+				constant = 0.005
+				uniform = np.ones_like(x)
+				
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1.0 - curvature)
+
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+				leaky_noise = self.implicit_noise(x)
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * multipliers  / (1/2 * mutation) 							
+				concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 	
+												
+				linear = np.dot(x, concluded_equilibrium)
+				planner_linear = linear * 2 / kl_div
+				planner_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(planner_linear))
+				planner_div = sigmoid + np.log1p(planner_div)			
+				uncertaintiness = planner_linear + leaky_noise/ (1.0 + sigmoid) - concluded_equilibrium 	
+				uncertainty_div = np.sum(planner_linear * np.log(np.clip(planner_linear, 1e-8, None)) - np.log(uncertaintiness))
+				uncertainty_div = sigmoid + np.log1p(uncertainty_div)
+				
+				first_curve = np.mean(np.abs(np.diff(np.diff(linear ))))
+				sec_curve = np.mean(np.abs(np.diff(np.diff(planner_linear))))	
+				third_curve = np.mean(np.abs(np.diff(np.diff(uncertaintiness))))
+				eff_curves = first_curve * third_curve / sec_curve + (1.0 - curvature)
+				
+				efficient_kl = planner_div / (1.0 + uncertainty_div) - kl_div
+				kl_curve = efficient_kl / 1.0 - eff_curves
+				div_manifold = planner_div / kl_curve - (1.0 + concluded_equilibrium)	
+				dynamic_efficiency = efficient_kl * net_multipliers / (1.0 + concluded_equilibrium) - net_equilibrium	
+				softed = dynamic_efficiency / div_manifold + concluded_equilibrium
+				
+				soft = np.dot(planner_linear, softed)				
+				soft /= softed
+				soft /= div_manifold 
+				soft /= eff_curves
+				
+				if np.isnan(soft).any() or not np.isfinite(soft).any():
+					soft = np.ones_like(soft)
+					
+				return soft
+				
+			def cellular_optimum_algorithm(self, inputs):
+				x = inputs
+				soft = self.cellular_softmax(x)
+				constant = 0.005
+				uniform = np.ones_like(x)
+				
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1.0 - curvature)
+				
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * multipliers / (1/2 * mutation) 							
+				concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 	
+								
+				first_linear = np.dot(x, concluded_equilibrium)
+				sec_linear = np.dot(soft, concluded_equilibrium)
+				all_linears = first_linear + sec_linear 
+				planner_linears = all_linears * 2 / kl_div		
+				planner_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(planner_linears))
+				planner_div = sigmoid + np.log1p(planner_div)
+				
+				conv_loss = planner_linears / (1.0 + sigmoid) - concluded_equilibrium
+				plan_conv_div = np.sum(planner_linears * np.log(np.clip(planner_linears, 1e-8, None)) - np.log(conv_loss))
+				plan_conv_div = sigmoid + np.log1p(plan_conv_div)
+				
+				first_curve = np.mean(np.abs(np.diff(np.diff(first_linear ))))
+				sec_curve = np.mean(np.abs(np.diff(np.diff(sec_linear))))	
+				third_curve = np.mean(np.abs(np.diff(np.diff(conv_loss))))
+				eff_curves = first_curve * third_curve / sec_curve + (1.0 - curvature)
+				
+				efficient_kl = planner_div / plan_conv_div - kl_div
+				kl_curve = efficient_kl / 1.0 - eff_curves
+				div_manifold = planner_div / 1.0 + kl_curve - concluded_equilibrium
+				dynamic_efficiency = efficient_kl * net_multipliers / 1.0 + (net_multipliers - concluded_equilibrium)
+				conv_guaranteed = sigmoid / 1.0 - dynamic_efficiency 
+				div_guaranteed = efficient_kl * bias / 1.0 + dynamic_efficiency
+				div_completeness = div_manifold / 1.0 + (div_guaranteed - conv_guaranteed)
+				concluded_probs_of_slope = dynamic_efficiency / div_guaranteed + (div_completeness - bias)
+				projected = concluded_probs_of_slope / div_completeness + concluded_equilibrium
+				
+				refined = np.dot(planner_linears, projected)
+				
+				if np.isnan(refined).any() or not np.isfinite(refined).any():
+					refined = np.ones_like(refined)
+					
+				return refined
+				
+				
+			def train_cellular(self, index):
+			    extract = self.extract_features()  
+			    chosen_reward = self.outer.net_equilibrium
+			    extract = np.array(extract, dtype=np.float32)
+			    extract = (extract - np.mean(extract)) / (np.std(extract) + 1e-8)
+			    shaped_rewards = extract * 0.1  
+			    shaped_rewards[index] = chosen_reward  
+			    shaped_rewards -= np.mean(shaped_rewards)
+			    shaped_rewards /= (np.std(shaped_rewards) + 1e-8)
+			    shaped_rewards = np.clip(shaped_rewards, -2.0, 2.0)
+			    inputs = np.array([self.extract_features()], dtype=np.float32)
+			    targets = shaped_rewards.reshape(1, -1).astype(np.float32)
+			    self.cellular_train(inputs, targets)				
+				
+												
+			def networking_layer_perceptron(self, logit):
+				x = logit
+				constant = 0.005
+				uniform = np.ones_like(x)
+	  				
+				self.activations = []
+				self.network_noise = []
+				
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1.0 - curvature)
+				
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * bias / (1/2 * multipliers) 							
+				concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 	
+				
+				meta_learn = np.dot(x, concluded_equilibrium)
+				planner_learn = meta_learn * 2 / kl_div
+				planner_conv = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				planner_conv = sigmoid + np.log1p(planner_conv)
+				
+				first_curve = np.mean(np.abs(np.diff(np.diff(meta_learn))))
+				sec_curve = np.mean(np.abs(np.diff(np.diff(planner_learn))))
+				all_curves = 1/137 + sec_curve / 1.0 + (first_curve - curvature )
+				
+				efficient_kl = planner_conv / 1.0 + kl_div
+				kl_curve = efficient_kl / 1.0 - efficient_kl
+				div_manifold = planner_conv / all_curves - concluded_equilibrium 
+				dynamic_efficiency = efficient_kl * net_multipliers / net_multipliers + (1.0 - div_manifold)
+						
+				refined = np.dot(planner_learn, dynamic_efficiency)
+				if np.isnan(refined).any() or not np.isfinite(refined).any():
+					refined = np.ones_like(refined)
+									
+				self.activations.append(refined)
+				for i in range(len(self.weights) - 1):
+					  z = np.dot(self.activations[-1], self.weights[i]) + self.biases[i]					  
+					  z = np.nan_to_num(z, nan=0.0, posinf=0.0, neginf=0.0)  
+			  
+					  
+					  a = self.leaky_relu(z, alpha=self.main.stability)
+					  self.network_noise.append(z)
+					  self.activations.append(a)
+
+					  
+				z = np.dot(self.activations[-1], self.weights[-1]) + self.biases[-1]
+				a = self.outer.lagrange_point_net(x, refined, z)
+				
+				if np.isnan(a).any() or not np.isfinite(a).any():
+					  a = np.ones_like(a) / len(a)
+					  
+				self.network_noise.append(z)
+				self.activations.append(a)    
+				 			
+				return a
+				
+			def extract_features(self):
+				try:
+					equilibrium = self.outer.net_equilibrium
+					bias = self.outer.bias	
+					multipliers = self.outer.multipliers 
+					mutation = self.outer.mutation 
+					node_satisfied = self.node_satisfiability 
+					feature_vector = np.array([equilibrium, bias, multipliers, mutation, node_satisfied], dtype=np.float32)
+					return feature_vector
+				except Exception as e:
+					print("error", e)
+					return False
+					
+			def cellular_choose(self):
+				inputs = np.array([self.extract_features() for i in range(len((self.index)))])
+				score = self.cellular_optimum_algorithm(inputs)
+				index = np.argmax(score)
+				return self.index[index], index
+
+						
+			def cellular_train(self, X, Y):
+			    entropy_coef = 0.075
+			    value_coef = 0.25
+			    policy_soft = self.networking_layer_perceptron(X)
+			    policy_tune = self.main.networking_layer_perceptron(policy_soft)       
+			    all_policy = policy_soft + policy_tune 
+			    output = self.cellular_softmax(all_policy)
+			    
+			    output = np.nan_to_num(output, nan=0.0, posinf=0.0, neginf=0.0)
+			    raw_curve = 0.05 + np.mean(np.abs(np.diff(np.diff(output))))
+			    uniform = np.ones_like(output) / len(output)
+			    
+			    kl_div= np.sum(output * np.log(np.clip(output,1e-8, None) - np.log(uniform)))
+			    kl_divergence = 0.05 + np.log1p(kl_div)
+			    sigmoid = 1.0 / (1 - raw_curve)
+
+			    equilibrium = self.outer.net_equilibrium			    
+			    net1_eff = self.outer.net1_eff		
+			    multipliers = self.outer.multipliers 
+			    mutation = self.outer.mutation 
+			    bias = self.outer.bias 
+			    leaky_noise = self.implicit_noise(X)
+			    
+			    net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)		        
+			    net_multipliers = (1.0 + net_equilibrium) * bias / (1/2 * multipliers)
+			    concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 	
+	    
+			    equilibrium_nodes = np.dot(X, concluded_equilibrium)
+			    mutation_nodes = np.dot(X, mutation)
+			    multipliers_nodes = np.dot(leaky_noise, multipliers)
+			    all_nodes = equilibrium_nodes + multipliers_nodes - mutation_nodes 
+			    
+			    planner_nodes = all_nodes / multipliers + (mutation - concluded_equilibrium)
+			    nodes_div = np.sum(X * np.log(np.clip(X, 1e-8, None)) - np.log(planner_nodes))
+			    
+			    first_curve = np.mean(np.abs(np.diff(np.diff(equilibrium_nodes))))
+			    
+			    sec_curve = np.mean(np.abs(np.diff(np.diff(mutation_nodes))))
+			    third_curve = np.mean(np.abs(np.diff(np.diff(multipliers_nodes))))	
+			    planner_curve = np.mean(np.abs(np.diff(np.diff(planner_nodes))))
+			    eff_curves = first_curve * third_curve / sec_curve + (1.0 - raw_curve)
+			    
+			    efficient_kl = nodes_div / 1.0 + kl_div
+			    kl_curve = efficient_kl / 1.0 - eff_curves
+			    div_manifold = nodes_div / 1.0 + kl_curve
+			    equilibrium = (1.0 + multipliers_nodes) - net1_eff / div_manifold 											
+			    
+			    advantages = np.tanh((Y - policy_tune) / (np.std(Y - policy_soft) + 1e-8)) / equilibrium
+			    log_soft = np.log(np.clip(policy_soft, 1e-8, 1.0))
+			    log_tune = np.log(np.clip(policy_tune, 1e-8, 1.0))
+			    
+			    loss_soft = -np.mean(np.sum(log_soft * advantages, axis=1) / 1.0 + multipliers)
+			    loss_tune = -np.mean(np.sum(log_tune * advantages, axis=1) / (1.0 + net1_eff) - mutation )
+			    
+			    entropy = -np.mean(np.sum(policy_soft * log_soft, axis=1) - np.log(uniform))
+			    max_entropy = sigmoid + np.log(policy_soft.shape[1])
+			    entropy_norm = (1.0 + entropy) / max_entropy
+			    weight = np.sum(X) / entropy_norm
+			    
+			    stability_weight = weight * net1_eff / (1.0 - entropy_norm)
+			    adaptivity_weight = weight * entropy_norm / 1.0 + equilibrium 
+			    
+			    policy_loss = stability_weight * net1_eff + bias / sigmoid +stability_weight * loss_soft + adaptivity_weight * loss_tune
+			    value_loss = np.mean((policy_tune - Y) ** 2) / 1.0 - equilibrium
+			    target_entropy = 0.6 * max_entropy / 1.0 - entropy_norm
+			    entropy_stability = (entropy - target_entropy) ** 2 / 1.0 + mutation - equilibrium
+			    
+			    entropy_adaptivity = adaptivity_weight / kl_curve
+			    loss = weight + policy_loss + value_coef * value_loss + self.beta * entropy_stability - self.alpha * entropy_adaptivity 
+			    d_policy = policy_loss - Y / efficient_kl - (1.0 + mutation)
+			    d_value  = 2 * (policy_tune - Y) / 1.0 + equilibrium
+			    d_entropy = -(np.log(np.clip(loss, 1e-8, 1.0)) + 1)
+			    deltas = [d_policy + value_coef * d_value - entropy_coef * d_entropy / net_equilibrium]
+    
+			    for i in reversed(range(len(self.weights) - 1)):
+			       dz = deltas[0].dot(self.weights[i + 1].T) * self.leaky_relu_derivative(self.network_noise[i], alpha=0.01)
+			       deltas.insert(0, dz)
+			    for i in range(len(self.weights)):
+		        	dw = self.activations[i].T.dot(deltas[i]) / X.shape[0]
+		        	db = np.sum(deltas[i], axis=0, keepdims=True) / X.shape[0]
+		        	norm = np.linalg.norm(dw)
+		        	if norm > 200:
+		        		dw = dw * (200 / norm)
+		        	norm_b = np.linalg.norm(db)
+		        	if norm_b > 200:
+		        		db = db * (200 / norm_b)
+			    self.weights[i] -= self.lr * dw			
+			    self.biases[i]  -= self.lr * db
+			    self.weights[i] = np.nan_to_num(self.weights[i], nan=0.0, posinf=200, neginf=-200)
+			    self.biases[i]  = np.nan_to_num(self.biases[i], nan=0.0, posinf=200, neginf=-200)
+		        
+			def run(self):					
+				active = False
+				special = self.special_nodes.cellular_special_nodes()	
+
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+				
+				choose, num = self.cellular_choose()
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * multipliers / (1/2 * mutation) 							
+				concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 				
+				scores = choose * net1_eff/ num + (1.0 - mutation)				
+
+				summed_evaluate = choose * net1_eff / (1.0 + mutation) - multipliers 
+				summed_special= choose * multipliers / (1.0 + mutation) - multipliers 
+												
+				if summed_evaluate >= summed_special:
+					score = summed_evaluate * choose / 1.0 + net_equilibrium
+				else:
+					score = choose + (summed_special - mutation) / choose - net_equilibrium
+											
+				if score < concluded_equilibrium:			
+					stabilization = self.lyapunov_stability(score)
+					if self.outer.satisfiability >= stabilization or stabilization >= summed_special:
+						if self.func:
+							action, index = self.cellular_choose()
+							self.train_cellular(index)
+							self.func
+							return True
+							
+					else:
+											
+						print("Hive Nodes Degrading..")
+						self.outer.satisfiability -= 0.001
+						return False	
+								
+				else:
+					self.outer.satisfiability = score
+					if self.func():
+						self.func
+						return True
+					return False
+
+
+														
+		class CellularReprogramming(Node):							
+			def __init__(self, outer, x, total_nodes,  total_input, children):
+				super().__init__(outer)
+				self.x = x
+				self.nodes = total_nodes
+				self.special_node = SpecialNodes(self.outer, x, nodes)
+				self.total_input = total_input
+				self.children = children	
+				self.func = HiveNodes(self.outer, x, func)
+				
+													
+																
+			def cellular_mutation(self):
+
+				x = self.x.copy()
+				constant = 0.005
+				uniform = np.ones_like(x)
+
+				
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1 - curvature)
+				
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				geometric_nodes = self.nodes
+				special_node = self.special_node.cellular_special_nodes()			
+				total_input = self.total_input
+				bias = self.outer.bias 
+								
+				alpha1 = np.dot(x, multipliers)
+				alpha2 = np.dot(x, mutation)
+				alpha3 = np.dot(x, equilibrium)	
+							
+				trA1 = np.linalg.norm(alpha1)
+				trA2 = np.linalg.norm(alpha2)
+				trA3 = np.linalg.norm(alpha3)	
+				s1 = trA1**2 - trA3 / equilibrium
+				s2 = (1/2) * (trA2**3 + trA3** 2  / equilibrium)
+				s3 = (1/6) * (trA3**3 - (3 * trA1 * trA2**2) + (2 * trA3**3) / (3 * trA3**3) / equilibrium)
+				all_sample_scores = (1.0 + s1 + s3 / s3 + s2 - s1)
+								
+
+				net_equilibrium = mutation * bias / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * net1_eff / (multipliers+ 1.0) - curvature										
+				concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 
+				evenly_spreading = net_multipliers + (alpha1  - geometric_nodes) / alpha3 - (1/2 * geometric_nodes)
+				equilibrium_of_spread = evenly_spreading * net1_eff / mutation - concluded_equilibrium				
+				equilibrium_of_sample = all_sample_scores * mutation / sigmoid + equilibrium_of_spread
+				
+				if equilibrium_of_spread.any() > equilibrium_of_sample.any():
+					list_special_nodes = special_node
+					for s1, s2, s3  in special_nodes:
+						conclusion_geometric_distance = (1.0 + s2 - s1) / (1/137 + s3 - s1)
+						conclusion = int(conclusion_geometric_distance)
+						conclusion = np.clip(conclusion, 0, 2)
+						guaranteed_node = special_nodes[conclusion_geometric_distance]
+						guaranteed_node = np.clip(guaranteed_node, 0, 2)
+						tentative_s = special_nodes[guaranteed_node]
+						tentative_s= np.clip(tentative_s, 0, 2)		
+						concluded_nodes = special_nodes[tentative_s] + special_nodes[tentative_s]	
+						reprogrammed_geometric_derivative = (1/137) + evenly_spreading * concluded_nodes / equilibrium_of_spread + (1/2 + concluded_nodes)
+							
+				else:
+					reprogrammed_geometric_derivative = (1/137) + evenly_spreading * net_multipliers / equilibrium_of_spread + (1/2 + net_multipliers)	
+					
+				return reprogrammed_geometric_derivative 	
+
+			def lyapunov_stability(self, evaluate):
+				x = self.x.copy()
+				constant = 0.005
+				uniform = np.ones_like(x)
+				
+				kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+				kl_div = constant  + np.log1p(kl_div)
+				curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+				sigmoid = 1.0 / (1 - curvature)
+				
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * evaluate / (1/2 * multipliers) 
+				
+				equilibrium_reachability = net_equilibrium / 1.0 - evaluate
+				guaranteed_reachability = net_multipliers * bias / 1.0 + equilibrium_reachability
+				technical_satisfiability = guaranteed_reachability / 1.0 + equilibrium_reachability 
+				satisfiability_reachable = technical_satisfiability / (1.0 + equilibrium_reachability) - bias
+				
+				return satisfiability_reachable				
+												
+			def run(self):
+
+				evaluate = self.cellular_mutation()						
+				equilibrium = self.outer.net_equilibrium
+				net1_eff = self.outer.net1_eff		
+				multipliers = self.outer.multipliers 
+				mutation = self.outer.mutation 
+				bias = self.outer.bias 
+				net_equilibrium = mutation * net1_eff / 1.0 + (multipliers - equilibrium)
+				net_multipliers = (1.0 + net_equilibrium) * evaluate / (1/2 * multipliers) 							
+				concluded_equilibrium = net_multipliers * bias / mutation - net_equilibrium 				
+				scores = np.mean(evaluate) / 1.0 + mutation
+								
+				if scores.any() < concluded_equilibrium.any():
+					stabilization = self.lyapunov_stability(evaluate)
+					if stabilization >= self.outer.satisfiability:
+						if self.func.run().any():
+							return self.func.run().any()
+						else:
+							return self.func.run()
+						return False				
+					else:
+						
+						print("Main Nodes Degrading..")
+						self.outer.satisfiability -= 0.001
+						return False	
+										
+				else:
+					self.outer.satisfiability = scores
+					if self.func.run():
+						return self.func.run()
+					else:
+						return self.func.run()
+					return False
+	
+	
+		cellular_tree = SequencialReplanner(self, [
+		    CellularReprogramming(self, x, nodes,  total_input, children1),
+		    HiveNodes(self, x, func)])
+		    
+		return cellular_tree.run()	
+									
+
+		
+		
+	def lagrange_point_net(self, x1, x2, x3):
+		x1 = x1.copy()			
+		x2 = x2.copy()
+		x3 = x3.copy()
+		constant = 0.005
+		
+		uniform = np.ones_like(x1)		
+		kl_div_x1= np.sum(x1 * np.log(np.clip(x1, 1e-8, None)) - np.log(uniform))
+		kl_div_x2= np.sum(x2 * np.log(np.clip(x2, 1e-8, None)) - np.log(uniform))
+		kl_div_x3= np.sum(x3 * np.log(np.clip(x3, 1e-8, None)) - np.log(uniform))				
+		kl_div_x1 = constant + np.log1p(kl_div_x1)
+		kl_div_x2 = constant + np.log1p(kl_div_x2)
+		kl_div_x3 = constant + np.log1p(kl_div_x3)
+		curvature1 = constant + np.mean(np.abs(np.diff(np.diff(x1))))
+		curvature2 = constant + np.mean(np.abs(np.diff(np.diff(x2))))
+		curvature3 = constant + np.mean(np.abs(np.diff(np.diff(x3))))	
+		dynamic_constant = constant + (1/137)  
+		efficient_div = (constant +  kl_div_x1) + kl_div_x2 / (dynamic_constant) + kl_div_x3	
+		efficient_curve = (constant + curvature1) + curvature2 / (dynamic_constant) - curvature3		
+		sigmoid = 1.0 / (1 - efficient_curve)
+
+		equilibrium = self.net_equilibrium
+		net1_eff = self.net1_eff		
+		multipliers = self.multipliers 
+		mutation = self.mutation 
+		bias = self.bias 
+		net_equilibrium = mutation * bias / 1.0 + (multipliers - equilibrium)
+		net_multipliers = (1.0 + net_equilibrium) * net1_eff / (multipliers+ 1.0) - efficient_curve
+		lagrange_curve = net_equilibrium / (1.0 - efficient_curve)
+		unconventional_satisfiable = lagrange_curve / (1.0 - net1_eff)
+		lagrange_seeking = net1_eff = net_equilibrium / unconventional_satisfiable +  (1.0 + lagrange_curve)
+		lagrange_probs_of_div = lagrange_seeking / (1.0 - lagrange_curve)
+		lagrange_probs_of_conv = lagrange_seeking /  (net_equilibrium - unconventional_satisfiable) 
+		lagrange_entropy_manifest = unconventional_satisfiable / (1.0 - lagrange_probs_of_div)
+		lagrange_dimension_proportion = net_multipliers / lagrange_curve + net_equilibrium
+		lagrange_net_halting_conv = (net_multipliers *lagrange_dimension_proportion) / lagrange_seeking + (lagrange_entropy_manifest - lagrange_probs_of_div)
+		manifold = lagrange_dimension_proportion * lagrange_seeking / net_multipliers + (lagrange_net_halting_conv - unconventional_satisfiable)
+		lagrange_geometric_manifold = lagrange_dimension_proportion / (1.0 + manifold) - unconventional_satisfiable
+		optimum_lagrange = (1.0 + lagrange_dimension_proportion) * net_multipliers / (lagrange_probs_of_div + lagrange_geometric_manifold) - unconventional_satisfiable
+		
+		lagrange1 = np.dot(x1, optimum_lagrange)
+		lagrange2 = np.dot(x2, optimum_lagrange)
+		lagrange3 = np.dot(x3, optimum_lagrange)
+		all_lagranges = lagrange1 + lagrange2 + lagrange3
+		planner_lagrange = all_lagranges / (1.0 + optimum_lagrange) - unconventional_satisfiable
+		planner_div = np.sum(all_lagranges * np.log(np.clip(all_lagranges, 1e-8, None)) - np.log(planner_lagrange))
+		planner_div = sigmoid + np.log1p(planner_div)
+		
+		lagrange_conv_matrix = planner_lagrange / (1.0 + np.exp(np.log1p(-optimum_lagrange)))
+		lagrange_div = np.sum(planner_lagrange * np.log(np.clip(planner_lagrange, 1e-8, None)) - np.log(lagrange_conv_matrix))
+		lagrange_div = sigmoid + np.log1p(lagrange_div)
+		
+		first_curve = np.mean(np.abs(np.diff(np.diff(lagrange1))))
+		sec_curve = np.mean(np.abs(np.diff(np.diff(lagrange2))))		
+		third_curve = np.mean(np.abs(np.diff(np.diff(lagrange3))))		
+		planner_curve = np.mean(np.abs(np.diff(np.diff(planner_lagrange))))		
+		conv_curve = np.mean(np.abs(np.diff(np.diff(lagrange_conv_matrix))))
+		eff_curve = first_curve + sec_curve + third_curve * planner_curve / 1.0 + (equilibrium - conv_curve)
+		
+		efficient_kl = planner_div / 1.0 + lagrange_div - efficient_div
+		kl_curve = efficient_kl / eff_curve 
+		div_manifold = lagrange_geometric_manifold / (efficient_kl - kl_curve)
+		hypothetical_lagrange_div_probs = optimum_lagrange *net_multipliers / lagrange_probs_of_div + (lagrange_probs_of_conv - manifold)
+		lagrange_concluded_geometry = lagrange_geometric_manifold * net_multipliers / hypothetical_lagrange_div_probs + (optimum_lagrange - unconventional_satisfiable)
+		concluded_manifold_slope_probs = lagrange_concluded_geometry / (1.0 -  lagrange_geometric_manifold)
+		theoretical_lagrange_connection = lagrange_concluded_geometry * net_multipliers / 1.0 + (hypothetical_lagrange_div_probs - unconventional_satisfiable)
+		theoretical_corruption_of_conns = 1.0 + lagrange_concluded_geometry / net_multipliers - theoretical_lagrange_connection 
+		equilibrium_of_conns_lagrange_point = optimum_lagrange * net_multipliers / (1.0 + theoretical_lagrange_connection) - concluded_manifold_slope_probs 
+		safe_range = lagrange_concluded_geometry / 1.0 - theoretical_corruption_of_conns 
+		safe_optima = equilibrium_of_conns_lagrange_point / 1.0 + safe_range
+		theoretical_slope_of_lagrange_optima = safe_optima / 1.0 - theoretical_corruption_of_conns 
+		concluded_slope = theoretical_slope_of_lagrange_optima / 1.0 + concluded_manifold_slope_probs
+		equilibrium_one = (safe_optima / 1.0 - concluded_slope)
+		equilibrium_two = (safe_optima / 1.0 + equilibrium_one)
+		concluded_equilibrium = net_multipliers * (equilibrium_one + equilibrium_two) / concluded_slope + (safe_optima - unconventional_satisfiable)
+		
+		first_div = np.dot(planner_lagrange, equilibrium_one)
+		sec_div = np.dot(planner_lagrange, equilibrium_two)
+		all_div = first_div + sec_div / 1.0 + concluded_equilibrium - theoretical_corruption_of_conns
+		refined = np.dot(all_div, concluded_equilibrium)		
+
+		if np.isnan(refined).any() or not np.isfinite(refined).any():
+				refined = np.ones_like(refined)
+				
+						
+		return refined	
+														
+
+class GeometricalSeeker:
+	def __init__(self, number_of_search, hypothetical_probabilities):
+		self.entropy_coef = 0.075
+		self.seeking = number_of_search
+		self.seeker1_efficiency = 0.1
+		self.seeker2_efficiency = 0.1
+		self.seeker3_efficiency = 0.1
+		self.seeker4_efficiency = 0.1
+		self.seeker5_efficiency = 0.1
+		self.turing_hypothetical_completeness_probabilities = hypothetical_probabilities
+		self.epsitron = EpsitronTransformer(0.004, 8, 1.25)
+		
+	def independent_entropy_seekerbot1(self, x):
+		x = x.copy()
+			
+		constant = 0.0005
+		uniform = np.ones_like(x)
+		kl_divergence = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+		kl_divergence = constant + np.log1p(kl_divergence)
+		curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+		sigmoid = 1.0 / (1 - curvature)
+		
+		turr_hype = self.turing_hypothetical_completeness_probabilities
+		turr_equilibrium_curve = turr_hype / (1.0 - curvature)
+		seeker_inmotion = self.seeker1_efficiency
+		seeking_inmotion = self.seeking
+		dynamic_seeking = seeker_inmotion / (1.0 + seeking_inmotion) - curvature
+		dynamic_seeker = dynamic_seeking  / (1 - sigmoid)
+		dimension_geometry = dynamic_seeker / curvature
+		hypothetical_entropy_dimension_geometry = dimension_geometry / (1 + turr_equilibrium_curve) 
+		miner_efficienciness = sigmoid + hypothetical_entropy_dimension_geometry / (1.0 + curvature) - sigmoid
+		
+		first_meta = np.exp(np.log1p(x))		
+		sec_meta = np.exp(np.log1p(first_meta))	
+		third_meta = np.exp(np.log1p(sec_meta))	
+		all_meta = first_meta + sec_meta + third_meta	
+		planner_div = np.sum(all_meta * np.log(np.clip(all_meta, 1e-8, None)) - np.log(x))
+		planner_div = sigmoid + np.log1p(planner_div)
+		planner_meta = all_meta * 2 / planner_div
+			
+		log_decay = sigmoid / np.exp(-np.log1p(all_meta))
+		log_to_decay_div = np.sum(log_decay * np.log(np.clip(log_decay, 1e-8, None)) - np.log(planner_meta))
+		log_to_decay_div = sigmoid + np.log1p(log_to_decay_div)
+		
+		first_imaginary_mat = np.dot(first_meta, miner_efficienciness)
+		sec_imaginary_mat = np.dot(sec_meta, miner_efficienciness)	
+		third_imaginary_mat = np.dot(first_meta, miner_efficienciness)	
+		fourth_imaginary_planner = np.dot(planner_meta, miner_efficienciness)
+		entropy_imaginary_dimension_descent = np.dot(fourth_imaginary_planner, hypothetical_entropy_dimension_geometry)
+		all_imaginary_mat = first_imaginary_mat + sec_imaginary_mat + third_imaginary_mat + fourth_imaginary_planner
+		imaginary_div_to_entropy = np.sum(all_imaginary_mat * np.log(np.clip(all_imaginary_mat, 1e-8, None)) - np.log(entropy_imaginary_dimension_descent))
+		imaginary_div_to_entropy = sigmoid + np.log1p(imaginary_div_to_entropy)
+		
+		
+		first_imaginary_curve = np.mean(np.abs(np.diff(np.diff(first_imaginary_mat))))
+		sec_imaginary_curve = np.mean(np.abs(np.diff(np.diff(sec_imaginary_mat))))				
+		third_imaginary_curve = np.mean(np.abs(np.diff(np.diff(third_imaginary_mat))))	
+		planner_imaginary_curve = np.mean(np.abs(np.diff(np.diff(first_imaginary_mat))))		
+		entropy_imaginary_curve = np.mean(np.abs(np.diff(np.diff(entropy_imaginary_dimension_descent))))	
+		all_curve = 1.0 + first_imaginary_curve + sec_imaginary_curve + third_imaginary_curve + planner_imaginary_curve / entropy_imaginary_curve	
+		
+		efficient_kl = planner_div / kl_divergence 
+		entropy_efficient_conv = log_to_decay_div / efficient_kl
+		entropy_efficient_div = imaginary_div_to_entropy / entropy_efficient_conv 
+		imaginary_manifold = entropy_efficient_div / all_curve
+		miner_convergence = miner_efficienciness / imaginary_manifold
+		hypothetical_miner_halting = (entropy_efficient_div +hypothetical_entropy_dimension_geometry) - dynamic_seeking / (1.0 + miner_convergence) - entropy_efficient_div 
+		entropy_dimension_geometry_concluded = (sigmoid +miner_convergence) - hypothetical_miner_halting / sigmoid + (entropy_efficient_div - imaginary_manifold)
+		efficient_entropy_mined = miner_convergence / (1.0 + hypothetical_miner_halting) - imaginary_manifold
+		geometric_of_superlinear_dimension_curve = entropy_dimension_geometry_concluded / imaginary_manifold 
+		equilibrium_of_mined_entropy_geometric_landscape = efficient_entropy_mined + hypothetical_miner_halting / (geometric_of_superlinear_dimension_curve + entropy_efficient_div) - turr_equilibrium_curve
+		efficient_seeking = miner_convergence / (1.0 + equilibrium_of_mined_entropy_geometric_landscape) - hypothetical_miner_halting
+		equilibrium_of_stabilization_of_typical_dimension = geometric_of_superlinear_dimension_curve / equilibrium_of_mined_entropy_geometric_landscape
+		
+		self.seeker1_efficiency = hypothetical_miner_halting /efficient_seeking	
+			
+		x += hypothetical_entropy_dimension_geometry / imaginary_manifold			
+		x += equilibrium_of_mined_entropy_geometric_landscape / equilibrium_of_stabilization_of_typical_dimension 
+		x += geometric_of_superlinear_dimension_curve / entropy_dimension_geometry_concluded 	
+		x += efficient_seeking / equilibrium_of_stabilization_of_typical_dimension 
+		x /= efficient_entropy_mined
+		x /= hypothetical_miner_halting
+		x += sigmoid 
+
+		if np.isnan(x).any() or not np.isfinite(x).any():
+			x = np.ones_like(x)
+			
+		return x
+		
+	def independent_geometric_manifold_dimension_seekerbot2(self, x):
+			x = x.copy()
+			constant = 0.005
+			
+			uniform = np.ones_like(x)
+			kl_divergence = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+			kl_divergence = constant + np.log1p(kl_divergence)
+			curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+			sigmoid = 1.0 / (1 - curvature)
+			turr_hype = self.turing_hypothetical_completeness_probabilities
+			turr_equilibrium_curve = turr_hype / (1.0 - curvature)
+			seeker_inmotion = self.seeker2_efficiency
+			seeking_inmotion = self.seeking
+			dynamic_seeking = seeker_inmotion / (1.0 + seeking_inmotion) - curvature
+			dynamic_seeker = dynamic_seeking  / 1.0 + (1.0 - sigmoid)
+			dimension_geometry = dynamic_seeker / curvature
+			dimensional_probabilities = turr_hype / 1.0 + (1.0 -  dimension_geometry)
+			hypothetical_geometric_dimension= dimensional_probabilities/ (1.0 + turr_equilibrium_curve) 
+			seeker_efficienciness = sigmoid + hypothetical_geometric_dimension / (1.0 + curvature) - sigmoid	
+			hypothetical_dimension_probabilities_concluded = (sigmoid +hypothetical_geometric_dimension) - curvature/ (1.0 - seeker_efficienciness)		
+			
+			first_meta = np.exp(np.log1p(x))
+			sec_meta = np.exp(np.log1p(first_meta))
+			third_meta = np.exp(np.log1p(sec_meta))
+			all_meta = first_meta + sec_meta + third_meta
+			planner_meta = all_meta * 2 / kl_divergence 
+			planner_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(planner_meta))
+			planner_div = sigmoid + np.log1p(planner_div)
+			
+			log_decay = sigmoid / np.exp(-np.log1p(planner_meta))
+			decay_to_planner = np.sum(log_decay * np.log(np.clip(log_decay, 1e-8, None)) - np.log(planner_meta))
+			decay_to_planner = sigmoid + np.log1p(decay_to_planner)
+			
+			first_dimensional_mat = np.dot(first_meta, hypothetical_dimension_probabilities_concluded)
+			sec_dimensional_mat = np.dot(sec_meta, hypothetical_dimension_probabilities_concluded)			
+			third_dimensional_mat = np.dot(third_meta, hypothetical_dimension_probabilities_concluded)		
+			planner_dimensional_mat = np.dot(planner_meta, hypothetical_dimension_probabilities_concluded)		
+			entropy_dimensional_mat = np.dot(log_decay, seeker_efficienciness)
+			all_dimensional_mat = first_dimensional_mat + sec_dimensional_mat + third_dimensional_mat + planner_dimensional_mat
+			planner_to_dimensional= all_dimensional_mat * 3 / decay_to_planner
+			entropy_dimensional_div= np.sum(planner_to_dimensional * np.log(np.clip(planner_to_dimensional, 1e-8, None)) - np.log(entropy_dimensional_mat))
+			entropy_dimensional_div = sigmoid + np.log1p(entropy_dimensional_div)
+			
+			first_mat_curve = np.mean(np.abs(np.diff(np.diff(first_dimensional_mat))))			
+			sec_mat_curve = np.mean(np.abs(np.diff(np.diff(sec_dimensional_mat))))						
+			third_mat_curve = np.mean(np.abs(np.diff(np.diff(third_dimensional_mat))))						
+			planner_mat_curve = np.mean(np.abs(np.diff(np.diff(planner_to_dimensional))))	
+			entropy_mat_curve = np.mean(np.abs(np.diff(np.diff(entropy_dimensional_mat))))	
+			all_dimensional_curves = 1.0 + first_mat_curve + sec_mat_curve + third_mat_curve + planner_mat_curve / entropy_mat_curve
+			
+			efficient_kl = planner_div / entropy_dimensional_div
+			entropy_efficient_matrix = entropy_dimensional_div / decay_to_planner
+			concluded_efficienciness_of_div = (sigmoid + entropy_efficient_matrix) - dimensional_probabilities  / (sigmoid + decay_to_planner) - efficient_kl
+			divergence_manifold = concluded_efficienciness_of_div / all_dimensional_curves
+			seeker_convergence = concluded_efficienciness_of_div / (1.0 - divergence_manifold)
+			hypothetical_seeker_halting_probabilities= seeker_convergence /(1.0 + concluded_efficienciness_of_div) - divergence_manifold
+			hypothetical_geometric_dimensional_manifold =  hypothetical_dimension_probabilities_concluded / (1.0 +entropy_efficient_matrix) - divergence_manifold 
+			equilibrium_of_entropy_probabilities = (sigmoid + turr_equilibrium_curve) - entropy_efficient_matrix / (sigmoid + hypothetical_geometric_dimensional_manifold) - hypothetical_seeker_halting_probabilities 
+			concluded_geometric_landscape_slope = (sigmoid + equilibrium_of_entropy_probabilities) - seeker_convergence / (sigmoid + hypothetical_geometric_dimensional_manifold) - concluded_efficienciness_of_div
+			seeker_seek_geometric_of_divergence_probabilities = (sigmoid + entropy_efficient_matrix) - concluded_geometric_landscape_slope / sigmoid - (equilibrium_of_entropy_probabilities + hypothetical_geometric_dimensional_manifold)
+			equilibrium_of_theoretical_efficient_search = (1.0 + seeker_seek_geometric_of_divergence_probabilities) - hypothetical_seeker_halting_probabilities  / (1.0 + concluded_geometric_landscape_slope) - equilibrium_of_entropy_probabilities
+			seeker_seeking_concluded_divergence = (1.0 +  seeker_seek_geometric_of_divergence_probabilities) - hypothetical_seeker_halting_probabilities  / (1.0 +  equilibrium_of_theoretical_efficient_search) - concluded_geometric_landscape_slope
+			equilibrium_of_geometrical_landscape_search = equilibrium_of_theoretical_efficient_search / (1.0 + concluded_geometric_landscape_slope ) - hypothetical_seeker_halting_probabilities 
+			geometric_dimensional_probabilities_acquired = (sigmoid + concluded_geometric_landscape_slope) - seeker_seek_geometric_of_divergence_probabilities / (sigmoid + equilibrium_of_geometrical_landscape_search) -equilibrium_of_entropy_probabilities 
+			
+			self.seeker2_efficiency = (1.0 +seeker_seeking_concluded_divergence) -geometric_dimensional_probabilities_acquired / (1.0 -  concluded_geometric_landscape_slope)
+			
+			x +=hypothetical_geometric_dimensional_manifold / dimensional_probabilities 
+			x += seeker_seeking_concluded_divergence / equilibrium_of_geometrical_landscape_search
+			x += equilibrium_of_theoretical_efficient_search / concluded_geometric_landscape_slope
+			x += entropy_efficient_matrix / concluded_efficienciness_of_div
+			x += seeker_convergence / hypothetical_seeker_halting_probabilities 
+			x += seeker_seek_geometric_of_divergence_probabilities / concluded_geometric_landscape_slope
+			x /= equilibrium_of_geometrical_landscape_search
+			x /= self.seeker2_efficiency
+			x /= hypothetical_geometric_dimensional_manifold 
+			x += sigmoid 
+			
+			if np.isnan(x).any() or not np.isfinite(x).any():
+				x = np.ones_like(x)
+				
+			return x
+			
+	def layer_norm(x, ent_coef):
+		x = x.copy()
+		constant = 0.005
+		
+		uniform = np.ones_like(x)
+		kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+		kl_div = constant + np.log1p(kl_div)
+		curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+		sigmoid = 1.0 / 1.0 + (1.0 - curvature)
+		turr_hype = self.turing_hypothetical_completeness_probabilities
+		turr_equilibrium_curve = turr_hype / (1.0 - curvature)
+		
+		first_meta = np.exp(np.log1p(x))
+		sec_meta = np.exp(np.log1p(first_meta))
+		all_meta = first_meta + sec_meta
+		planner_meta = all_meta * 2 / kl_div
+		planner_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(planner_meta))
+		planner_div = sigmoid + np.log1p(planner_div)
+		
+		first_curve = np.mean(np.abs(np.diff(np.diff(first_meta))))
+		sec_curve = np.mean(np.abs(np.diff(np.diff(sec_meta))))
+		planner_curve = np.mean(np.abs(np.diff(np.diff(planner_meta))))
+		all_curve = first_curve + sec_curve
+		
+		efficient_curve = planner_curve / 1.0 + (1.0 - all_curve)
+		efficient_kl = planner_div / kl_div
+		div_manifold = efficient_kl / efficient_curve
+		equilibrium_of_halting = efficient_kl / (1.0 + div_manifold) - ent_coef
+		equilibrium_of_efficienciness = turr_equilibrium_curve / 1.0 + (1.0 - equilibrium_of_halting)
+		
+		x += planner_div / efficient_kl
+		x += efficient_kl / equilibrium_of_halting
+		x /= div_manifold 
+		x /= equilibrium_of_efficienciness
+		
+		if np.isnan(x).any() or not np.isfinite(x).any():
+			x = np.ones_like(x)
+					
+		return x
+											
+	def independent_divergence_dimensional_manifold_seekerbot3(self, x):
+			x = x.copy()
+			constant = 0.0005
+			
+			uniform = np.ones_like(x)
+			kl_divergence = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+			kl_divergence = constant + np.log1p(kl_divergence)
+			curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+			sigmoid = 1.0 / (1.0 - curvature)
+			
+			turr_hype = self.turing_hypothetical_completeness_probabilities
+			turr_equilibrium_curve = turr_hype / (1.0 - curvature)
+			seeker_inmotion = self.seeker3_efficiency
+			seeking_inmotion = self.seeking
+			dynamic_seeking = seeker_inmotion / (1.0 + seeking_inmotion) - turr_equilibrium_curve
+			dynamic_seeker = dynamic_seeking  / (1.0 + 1.0) - turr_equilibrium_curve
+			seeked_divergence_of_geometrical_curvature  = dynamic_seeker / turr_equilibrium_curve 
+			hypothetical_projection_of_dimension_of_divergenceness = dynamic_seeker / 1.0 + (1.0 - seeked_divergence_of_geometrical_curvature)
+			manifestation_of_converged_probabilities_in_geometrical_manifold_of_divergence = hypothetical_projection_of_dimension_of_divergenceness / 1.0 + (seeked_divergence_of_geometrical_curvature - turr_equilibrium_curve)
+			hypothetical_convergence_geometrical_manifold=manifestation_of_converged_probabilities_in_geometrical_manifold_of_divergence / (1.0 + turr_equilibrium_curve) 
+			seeker_efficienciness = sigmoid + hypothetical_convergence_geometrical_manifold / (sigmoid + dynamic_seeker) - manifestation_of_converged_probabilities_in_geometrical_manifold_of_divergence 
+			hypothetical_conv_manifestation_concluded = (sigmoid + hypothetical_convergence_geometrical_manifold) - seeked_divergence_of_geometrical_curvature / (sigmoid + seeker_efficienciness) - turr_equilibrium_curve
+			efficient_dimensional_divergence_manifold = seeker_efficienciness / 1.0 +(hypothetical_conv_manifestation_concluded - hypothetical_convergence_geometrical_manifold)
+			
+			first_linear_meta = np.dot(x, efficient_dimensional_divergence_manifold)
+			sec_linear_meta = np.dot(first_linear_meta, efficient_dimensional_divergence_manifold)
+			third_linear_meta = np.dot(sec_linear_meta, efficient_dimensional_divergence_manifold)
+			all_meta = first_linear_meta + sec_linear_meta + third_linear_meta
+			planner_meta = all_meta * 3 / kl_divergence
+			planner_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(planner_meta))
+			planner_div = sigmoid + np.log1p(planner_div)
+			
+			hypothetical_entropy_signature_loss = hypothetical_conv_manifestation_concluded / (1.0 + manifestation_of_converged_probabilities_in_geometrical_manifold_of_divergence) - efficient_dimensional_divergence_manifold
+			entropy_signature_remains = hypothetical_entropy_signature_loss / np.exp(-np.log1p(planner_meta))
+			planner_decay_div = np.sum(planner_meta * np.log(np.clip(planner_meta, 1e-8, None)) - np.log(-entropy_signature_remains))
+			planner_decay_div = sigmoid + np.log1p(planner_decay_div)
+			
+			first_curve = np.mean(np.abs(np.diff(np.diff(first_linear_meta))))
+			sec_curve = np.mean(np.abs(np.diff(np.diff(sec_linear_meta))))			
+			third_curve = np.mean(np.abs(np.diff(np.diff(third_linear_meta))))						
+			fourth_curve = np.mean(np.abs(np.diff(np.diff(planner_meta))))													
+			decay_curve = np.mean(np.abs(np.diff(np.diff(entropy_signature_remains))))
+			all_curves = 1.0 + first_curve + sec_curve + third_curve + fourth_curve / decay_curve		
+			
+			efficient_kl = planner_div / planner_decay_div 
+			curve_div = efficient_kl / all_curves
+			div_manifold = planner_div / curve_div
+			entropy_efficient_matrix = planner_div / hypothetical_entropy_signature_loss + (1.0 - hypothetical_conv_manifestation_concluded) 		
+			concluded_efficienciness_of_div_dimensional_manifold = (sigmoid + hypothetical_projection_of_dimension_of_divergenceness) - manifestation_of_converged_probabilities_in_geometrical_manifold_of_divergence / (sigmoid + hypothetical_conv_manifestation_concluded) - hypothetical_convergence_geometrical_manifold
+			hypothetical_geometric_density_of_div_manifestation = concluded_efficienciness_of_div_dimensional_manifold / hypothetical_projection_of_dimension_of_divergenceness + (1.0 - turr_equilibrium_curve)
+			equilibrium_between_conv_and_div_in_manifold = hypothetical_geometric_density_of_div_manifestation / turr_equilibrium_curve + (concluded_efficienciness_of_div_dimensional_manifold - manifestation_of_converged_probabilities_in_geometrical_manifold_of_divergence)
+			hypothetical_slope_of_conv_manifold = concluded_efficienciness_of_div_dimensional_manifold / 1.0 + (1.0 - efficient_dimensional_divergence_manifold)
+			concluded_dimensional_geometric_projection = hypothetical_geometric_density_of_div_manifestation / 1.0 + (hypothetical_slope_of_conv_manifold - equilibrium_between_conv_and_div_in_manifold) 
+			concluded_efficient_dimensional_divergence_exploitation = 1.0 + (concluded_dimensional_geometric_projection - hypothetical_slope_of_conv_manifold) / equilibrium_between_conv_and_div_in_manifold + (manifestation_of_converged_probabilities_in_geometrical_manifold_of_divergence)
+			hypothetical_seeker_halting = manifestation_of_converged_probabilities_in_geometrical_manifold_of_divergence / concluded_dimensional_geometric_projection + (1.0 - concluded_efficient_dimensional_divergence_exploitation)
+			efficienciness_of_seeker_probs = concluded_efficient_dimensional_divergence_exploitation /equilibrium_between_conv_and_div_in_manifold + (1.0 - hypothetical_seeker_halting)	
+			concluded_dimensional_space_geometry = sigmoid + (efficienciness_of_seeker_probs - hypothetical_slope_of_conv_manifold) / concluded_dimensional_geometric_projection + (hypothetical_entropy_signature_loss - equilibrium_between_conv_and_div_in_manifold)
+			equilibrium_of_exploration = concluded_dimensional_space_geometry + (concluded_efficient_dimensional_divergence_exploitation - hypothetical_entropy_signature_loss) / 1.0 + (efficienciness_of_seeker_probs -hypothetical_seeker_halting)
+			probabilities_stage_of_seeker = concluded_efficient_dimensional_divergence_exploitation /equilibrium_of_exploration
+			understanding_the_principles_of_geometrical_divergence_of_dimensional_manifold = probabilities_stage_of_seeker / equilibrium_between_conv_and_div_in_manifold + (equilibrium_of_exploration - turr_equilibrium_curve)
+			inmotion = understanding_the_principles_of_geometrical_divergence_of_dimensional_manifold / 1.0 +(1.0 - probabilities_stage_of_seeker )
+			
+			inmanaged = np.dot(planner_meta, probabilities_stage_of_seeker)
+			inplanned = np.dot(inmanaged, understanding_the_principles_of_geometrical_divergence_of_dimensional_manifold)
+			refined = np.dot(inplanned, inmotion)
+			
+			refined = layer_norm(refined, 1.25)
+			
+			if np.isnan(refined).any() or not np.isfinite(refined).any():
+				refined = np.ones_like(refined)
+				
+			return refined
+			
+	def multirole_geometric_efficiency_optimum_seekerbot4(self, x):
+			x = x.copy()
+			constant = 0.005
+			
+			Q, K, V = self.epsitron.epsitron_multi_badge_softmax(x, constant=0.005)
+			lin_Q, lin_K, lin_V = self.epsitron.epsitron_lite_multi_matrix_linear_softmax(x)
+			s1 = self.independent_entropy_seekerbot1(Q)
+			s2 = self.independent_geometric_manifold_dimension_seekerbot2(K)
+			s3 = self.independent_divergence_dimensional_manifold_seekerbot3(V)			
+			
+			uniform = np.ones_like(x)			
+			kl_div = np.sum(x * np.log(np.clip(x, 1e-8, None)) - np.log(uniform))
+			kl_div = constant + np.log1p(kl_div)
+			curvature = constant + np.mean(np.abs(np.diff(np.diff(x))))
+			sigmoid = 1.0 / (1 - curvature)
+			
+			kl_Q = np.sum(lin_Q * np.log(np.clip(lin_Q, 1e-8, None)) - np.log(Q))
+			kl_K = np.sum(lin_K * np.log(np.clip(lin_K, 1e-8, None)) - np.log(K))
+			kl_V = np.sum(lin_V * np.log(np.clip(lin_V, 1e-8, None)) - np.log(V))
+			kl_Q = sigmoid + np.log1p(kl_Q)
+			kl_K = sigmoid + np.log1p(kl_K)
+			kl_V = sigmoid + np.log1p(kl_V)			
+			efficiency_div_ratio = kl_K + kl_Q / (1.0 + kl_V) - kl_div
+									
+			turr_hype = self.turing_hypothetical_completeness_probabilities
+			turr_equilibrium_curve = turr_hype / (1.0 - curvature)
+			seeker1_inmotion = self.seeker1_efficiency	
+			seeker2_inmotion = self.seeker2_efficiency
+			seeker3_inmotion = self.seeker3_efficiency 
+			seeker4_inmotion = self.seeker4_efficiency		
+			seeking_inmotion = self.seeking
+			seeker_efficiency_ratio = seeker1_inmotion + seeker2_inmotion + seeker3_inmotion + seeker4_inmotion / turr_equilibrium_curve + (1.0 - curvature)
+			
+			dynamic_geometric_optimal_seeking = seeker_efficiency_ratio / seeking_inmotion + (1.0 - turr_hype)
+			dynamic_geometric_optimal_seeker = dynamic_geometric_optimal_seeking / turr_equilibrium_curve + (seeker_efficiency_ratio - seeking_inmotion)
+			hypothetical_entropy_manifestation_probs = turr_hype / 1.0 + (seeker_efficiency_ratio - turr_equilibrium_curve)
+			hypothetical_minimum_entropy_dimension = hypothetical_entropy_manifestation_probs / (seeker_efficiency_ratio + dynamic_geometric_optimal_seeker) - dynamic_geometric_optimal_seeking
+			hypothetical_seeker_conv_halting = dynamic_geometric_optimal_seeker / hypothetical_minimum_entropy_dimension + (dynamic_geometric_optimal_seeking - turr_equilibrium_curve)
+			hypothetical_seeker_div_probs = dynamic_geometric_optimal_seeker / (hypothetical_entropy_manifestation_probs + hypothetical_seeker_conv_halting) - turr_equilibrium_curve
+			geometric_optimum_manifold = hypothetical_seeker_div_probs + dynamic_geometric_optimal_seeker  / hypothetical_entropy_manifestation_probs + (dynamic_geometric_optimal_seeker - hypothetical_seeker_conv_halting)
+			concluded_manifold_slope = geometric_optimum_manifold / turr_equilibrium_curve + (hypothetical_seeker_div_probs - hypothetical_seeker_conv_halting)
+			projection = geometric_optimum_manifold / (concluded_manifold_slope - turr_equilibrium_curve)	
+			eff_manifold= projection / turr_equilibrium_curve + (geometric_optimum_manifold - efficiency_div_ratio)	
+							
+			linear_A = np.dot(lin_Q, eff_manifold)
+			linear_B = np.dot(lin_K, eff_manifold)
+			linear_C = np.dot(lin_V, eff_manifold)
+			all_linears = linear_A + linear_B + linear_C
+			planner_linear = all_linears / (turr_equilibrium_curve + eff_manifold) - kl_div
+			
+			planner_div = np.sum(all_linears * np.log(np.clip(all_linears, 1e-8, None)) - np.log(planner_linear))
+			planner_div = sigmoid + np.log1p(planner_div)
+			
+			conv_grad = planner_linear / projection + (eff_manifold - turr_equilibrium_curve)
+			conv_probs = np.sum(conv_grad * np.log(np.clip(conv_grad, 1e-8, None)) - np.log(uniform))
+			conv_probs = sigmoid + np.log1p(conv_probs)
+			conv_loss = eff_manifold + sigmoid / turr_equilibrium_curve + (planner_div - conv_probs)
+			div_equilibrium = geometric_optimum_manifold  / turr_equilibrium_curve + (eff_manifold - conv_loss)
+			
+			first_curve = np.mean(np.abs(np.diff(np.diff(linear_A))))			
+			sec_curve = np.mean(np.abs(np.diff(np.diff(linear_B))))						
+			third_curve = np.mean(np.abs(np.diff(np.diff(linear_C))))						
+			planner_curve = np.mean(np.abs(np.diff(np.diff(planner_linear))))						
+			conv_curve = np.mean(np.abs(np.diff(np.diff(conv_grad))))					
+			eff_curve = first_curve + sec_curve + third_curve + planner_curve / turr_equilibrium_curve + (turr_equilibrium_curve - conv_curve)
+			
+			efficient_kl = planner_div / 1.0 + (div_equilibrium -conv_loss)
+			kl_curve = efficient_kl / turr_equilibrium_curve + (eff_curve - eff_manifold)
+			div_manifold = eff_manifold / kl_curve + (efficient_kl - conv_loss)
+			efficiency_of_manifold = eff_manifold + sigmoid / div_manifold + (kl_curve - conv_loss)
+			seeker_conv_probs = conv_probs + (1.0 - conv_loss) / 1.0 +(efficiency_of_manifold - turr_equilibrium_curve)
+			seeker_div_probs = efficiency_of_manifold / turr_equilibrium_curve + (seeker_conv_probs - div_manifold)
+			dynamic_slope_of_attention_probs = concluded_manifold_slope + sigmoid / efficiency_of_manifold + (seeker_div_probs - seeker_conv_probs)
+			concluded_halting_probs = hypothetical_seeker_conv_halting / div_manifold + (seeker_conv_probs - turr_equilibrium_curve)
+			equilibrium_slope_probs = (sigmoid + efficiency_of_manifold) - seeker_conv_probs / div_manifold + (hypothetical_entropy_manifestation_probs - concluded_halting_probs)
+			optimal = sigmoid +dynamic_slope_of_attention_probs / equilibrium_slope_probs + (seeker_div_probs - concluded_halting_probs)
+			optimum = optimal + sigmoid / equilibrium_slope_probs + (1.0 - efficiency_div_ratio)
+			
+			optimum_A = np.dot(Q, optimum)
+			optimum_B = np.dot(K, optimum)
+			optimum_C = np.dot(V, optimum)			
+			all_optimum = optimum_A + optimum_B + optimum_C
+			op_optimum = all_optimum / (1.0 + optimum)
+			
+			optimum1 = np.dot(s1, optimum)
+			optimum2 = np.dot(s2, optimum)
+			optimum3 = np.dot(s3, optimum)	
+			all_optimum = optimum1 + optimum2 + optimum3
+			
+			eff_optimum = all_optimum + op_optimum / sigmoid + optimum 
+					
+			self.seeker1_efficiency = optimum / (1.0 - optimal)
+			self.seeker2_efficiency = optimum / (1.0 - optimal)
+			self.seeker3_efficiency = optimum / (1.0 - optimal)
+			self.seeker4_efficiency = optimum / (1.0 - optimal)
+			
+			layer = self.epsitron.epsitron_master_attention(eff_optimum)				
+			
+			if np.isnan(layer).any() or not np.isfinite(layer).any():
+				layer = np.ones_like(x)
+				
+			return layer			
+						
