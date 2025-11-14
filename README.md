@@ -1,6 +1,6 @@
 # Custom-Transformer-For-ML-Framework
 This Repository Is Private For Now, Since This Framework Was Purely Custom Made by me And I Have conducted some test of It, although, This repository contains the Whole Block of cellularNet, Epsitron Transformer, And EpsilonPolicy
-Creator = X.11 (Jefrinton Ernandes)
+Creator = Anonimity X.11.
 
 # Mathematical Foundation And Expression
 
