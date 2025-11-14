@@ -60,6 +60,8 @@ Hitchins moduli space is a mathematical equation to calculate the theoretical ge
 				s3 = (1/6) * (trA3**3 - (3 * trA1 * trA2**2) + (2 * trA3**3) / (3 * trA3**3) / equilibrium)
 				all_sample_scores = (1.0 + s1 + s3 / s3 + s2 - s1)``` 
 
+
+
 where trAa1 used to calculate th the magnitude of a vector or matrix, and seasons (the s1, s2, s3 part) will calculate the theoretical geometrical position based on the magnitude of that matrix or a vector by dividing it with equilibrium, it ensures each seasons can theoretically return a stable equilibrium scalar.
 
 
