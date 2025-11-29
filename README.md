@@ -30,6 +30,12 @@ Kl_divergence = np.sum(logit * np.log(logit)) - np.log(uniform_logit))
 ```
 From the code, This Version Of KL divergence was much more sensitive to How much it has diverged, using ``` log(uniform)``` tells the model how much it has diverged, This Formula was Proved to be more Numerically stable and Efficient At Calculating Divergence from uniformity.
 
+●. Logistic Growth equation:
+CellularAutomataNet Used A Logistic equation to maximize Logistic Growth and Potentially Maximize Growth efficiency from Superlinear Manifold with Dynamic Constraint From Logistic equation:
+
+``` Logistic satisfiability = 1.0 + Logistic_stability / sigmoid```
+Where sigmoid creates a bounded Superlinear growth and stability ensures Logistic constraint.
+
 ●. Curvature:
 Curvature Is Used to calculate the geometry curve of the logits and the curvature of each Nested logit or Probabilities Simulation.
 
@@ -66,9 +72,9 @@ where trAa1 used to calculate th the magnitude of a vector or matrix, and season
 
 
 
-# FolderNet/cellularnet Class
+# CellularAutomataNet Class
 
-FolderNet is A MLP (Multi Layer perceptron) Neural Network That Used Chain_algorithm, forward_algorithm, and tune_algorithm, to dynamically shift and refine logits before activations, this feedback loop creates a shifting nonlinear process that were constantly self correcting and self adjusting. 
+CellularAutomataNet is A MLP (Multi Layer perceptron) Neural Network That Used Chain_algorithm, forward_algorithm, and tune_algorithm, to dynamically shift and refine logits before activations, this feedback loop creates a shifting nonlinear process that were constantly self correcting and self adjusting. 
 
 
 # EpsitronTransformer Class
