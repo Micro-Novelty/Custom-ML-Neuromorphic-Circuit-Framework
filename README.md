@@ -40,9 +40,11 @@ Where sigmoid creates a bounded Superlinear growth and stability ensures Logisti
 B. 3 fundamental superlinear with bounded logistic growth constraint equation inspired from riemannian geometry	with differential calculus that forms a logarithmic coupling.
 This equation created a stable superlinear with logistic cnstraint that was ensured from the 1.0 as statistical coupling to ensure finite distances given any logits, thus creating a differential calculus inspired from riemannian optimization and logarithmic coupling where each equations complete each others weaknessess.  
 
-	     	  	```fundamental_logistic_geodesic= optimum / 1.0 + logistic_stability
+```
+fundamental_logistic_geodesic= optimum / 1.0 + logistic_stability
     fundamental_logistic_stability = logistic_equilibrium / 1.0 + optimum
-    fundamental_logistic_sequencing = optimum / 1.0 + sigmoid```
+    fundamental_logistic_sequencing = optimum / 1.0 + sigmoid
+```
 
 
 C. 3 fundamental logistic equation derived to acquire the thorough geodesic info per calculus variations of dimensionless number to acquire a stable modelling and a high efficiency of geodesic information in any dimensionless geometric space in euclidean range			   
