@@ -34,14 +34,15 @@ From the code, This Version Of KL divergence was much more sensitive to How much
 A. CellularAutomataNet Used A Logistic equation to maximize Logistic Growth and Potentially Maximize Growth efficiency from Superlinear Manifold with Dynamic Constraint From Logistic equation:
 
 ``` Logistic satisfiability = 1.0 + Logistic_stability / sigmoid```
+
 Where sigmoid creates a bounded Superlinear growth and stability ensures Logistic constraint.
 
 B. 3 fundamental superlinear with bounded logistic growth constraint equation inspired from riemannian geometry	with differential calculus that forms a logarithmic coupling.
 This equation created a stable superlinear with logistic cnstraint that was ensured from the 1.0 as statistical coupling to ensure finite distances given any logits, thus creating a differential calculus inspired from riemannian optimization and logarithmic coupling where each equations complete each others weaknessess.  
 
 	     	  	```fundamental_logistic_geodesic= optimum / 1.0 + logistic_stability
-fundamental_logistic_stability = logistic_equilibrium / 1.0 + optimum
-fundamental_logistic_sequencing = optimum / 1.0 + sigmoid```
+    fundamental_logistic_stability = logistic_equilibrium / 1.0 + optimum
+    fundamental_logistic_sequencing = optimum / 1.0 + sigmoid```
 
 
 C. 3 fundamental logistic equation derived to acquire the thorough geodesic info per calculus variations of dimensionless number to acquire a stable modelling and a high efficiency of geodesic information in any dimensionless geometric space in euclidean range			   
@@ -49,11 +50,12 @@ C. 3 fundamental logistic equation derived to acquire the thorough geodesic info
 2. (1/6) was used to calculate the theoretical geodesic space of information efficiency through euclidean range in moduli space where trA3 > 0 to ensure logistic growth stability through superlinear search.
 			    
 3. simplified moduli space equations combined with geodesic mapping efficiency to ensure both logistic and superlinear growth to maximize information gather efficiency and stability ensuring both appear in geometric efficiency through moduli space search with trA3 > 0 and range 0 -> finite numbers with any given positive logits, this equation will provide implicit eigenvalues to the model (as shown in the geodesic_optimum) that can map any geodesic topological space where it will ensure the models stability and convergence.
+
 		    
 ```trA1 = projection / (1.0 - slope)
-trA2 = (1/2) + stability_modelling / 1.0 + trA1**2
-trA3 = (1/6) + logistic1 / (trA2**2) - 1.0
-geodesic_optimum = np.dot(x, trA3)```
+   trA2 = (1/2) + stability_modelling / 1.0 + trA1**2
+   trA3 = (1/6) + logistic1 / (trA2**2) - 1.0
+   geodesic_optimum = np.dot(x, trA3)```
 			    
 
 ●. Curvature:
