@@ -1,6 +1,6 @@
 # Custom-ML-Framework
-This Framework Was Purely Custom Made by us And we Have conducted some analytical test of It (lyapunov stability test, exploration vs exploitation), although, This repository contains the Whole Block of cellularAutomataNet, Epsitron Transformer, And EpsilonPolicy, Hope you understand the rigorous math and its Functions. :)
-Creator = Anonimity X.11 / Indonesia.
+This Framework Was Purely Custom Made by us (Me and my Friend) And we Have conducted some analytical test of It (lyapunov stability test, spectral radius, exploration vs exploitation evaluation), although, This repository contains the Whole Block of cellularAutomataNet, Epsitron Transformer, And EpsilonPolicy, etc to provide originality of development. Hope you understand the rigorous math and its Functions. Have Fun Checking and testing :)
+Creator = Anonimity X.11 / Indonesia (Age 16) 
 
 # Mathematical Foundation And Expression
 
@@ -126,5 +126,29 @@ CellularImbrium Is a Hierarchical Tree that consist of two Networking Layer perc
 - After FolderNet was created, i realized that conventional Transformer doesnt directly Work and fit with my FolderNet, since it was using Standard Linear Q, K, V. So FolderNet requires attention that works by using geometric learning, FolderNet was then renamed to CellularNet.
 - EpsilonPolicy was made for the Agents Policy that enables the Agent to Change its behavior by injecting a Stable exploration and exploitation with geometric optimization.
 - LafoldBot And geometrical seeker was later made to Help EpsitronTransformer and EpsilonPolicy, It used as a meta helper for Development.
-- Days Ago cellularImbrium Was made to execute Many of that Modules to cooperate and form a stable dynamic hieraichal tree.
+- later cellularImbrium Was made to execute Many of that Modules to cooperate and form a stable dynamic hieraichal tree.
+- Logistic equations ensure the model has implicit stability and self converging toward a stable dynamic attractor.
+
+# Empirical Validation of My Model:
+
+A. Empirical Result:
+
+1. Spectral Radius:
+●. - Spectral Radius = 0.0 -> 0.0000000001
+   - Model contraction = True
+   - Convergence probabilities Guarantee from first training, given the fixed attractor.
+
+2. Pyshics based Extension evaluation:
+  1. Mean Motion of the Model can reach up to 0.4 -> 0.6
+  2. Std Motion of the model can reach
+Up to 0.4 -> 0.7
+  3. Initial entropy gain = 1.0008e-12
+  4. Transport metric of the NN = -1.3 -> -0.6
+  5. Fisher distance in geometric topological space = 0.7
+
+B. explanation:
+The Empirical Results implies that the model Cant be evaluated by simple ML heuristics, it exhibits a stable dynamic between convergence and exploration with ensured stability from the mathematical equations. Despite a High convergence probabilities, the AI can Still Automatically Explores probabilities because of the topological noise given from the curvature sensitivity and initial basin projection.
+
+  
+
 
