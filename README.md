@@ -47,9 +47,9 @@ fundamental_logistic_geodesic= optimum / 1.0 + logistic_stability
 ```
 
 
-C. 3 fundamental logistic equation derived to acquire the thorough geodesic info per calculus variations of dimensionless number to acquire a stable modelling and a high efficiency of geodesic information in any dimensionless geometric space in euclidean range			   
-1. (1/2) was used to calculate the moduli space of the geometric dimensionless number thay acquire a stable geodesic efficiency of an information or data where trA2 > 0 given positive logits  to ensure geodesic stability of each logistic growth.
-2. (1/6) was used to calculate the theoretical geodesic space of information efficiency through euclidean range in moduli space where trA3 > 0 to ensure logistic growth stability through superlinear search.
+C. 3 fundamental logistic equation derived to acquire the thorough geodesic info per using calculus variations that used to acquire dimensionless number of probabilities to acquire a stable modelling and a high efficiency of geodesic information in any dimensionless geometric space of moduli space properties.		   
+1. (1/2) was used to calculate the moduli space of the phase projection of geometric properties of dimensionless matrix that will thoroughly acquire a stable geodesic efficiency of an information transport or data where trA2 > 0 given positive logits  to ensure geodesic stability of each logistic growth.
+2. (1/6) was used to calculate the theoretical geodesic space of information efficiency through euclidean range in moduli space in respect to geometric properties where trA3 > 0 to ensure efficient search through superlinear growth with logistic constraint modelling of phase projection of any given valid value.
 			    
 3. simplified moduli space equations combined with geodesic mapping efficiency to ensure both logistic and superlinear growth to maximize information gather efficiency and stability ensuring both appear in geometric efficiency through moduli space search with trA3 > 0 and range 0 -> finite numbers with any given positive logits, this equation will provide implicit eigenvalues to the model (as shown in the geodesic_optimum) that can map any geodesic topological space where it will ensure the models stability and convergence.
 
