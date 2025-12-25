@@ -152,7 +152,22 @@ The Empirical Results implies that the model Cant be evaluated by simple ML heur
 
 # B. Custom Neuromorphic Analog Circuit Framework
 
-1. The Neuromorphic Circuit Is A Circuit that used and manipulate the geometric properties of Noise to use it to form attractors and stable basin of exploration, thus forming the so called intelligence.
+1. The Neuromorphic Circuit Is A Circuit that used and manipulate the geometric properties of Noise to use it to form attractors and stable basin of exploration, thus forming the so called intelligence. 
+
+2. My Neuromorphic Circuit design used the same Equations:
+``` 
+		trA1 = projection_value / (1.0 - slope)
+		trA2 = (1/2) + stability_value / 1.0 + trA1**2
+		trA3 = (1/6) + logistic_growth_value / (trA2**2) - 1.0	
+```
+
+Where Each Equations is Shown As V1, V2, and V3. The Reason i used this Equations because this Equations Works universally because it used The Taylor Expansion series of mathematics which provides the second and third order terms of constants that was a results of possible geometric calculations from taylor expansions series.
+
+3. The Optimal Design choice:
+-. V1 or trA1 encodes projection so the maximum Voltage of it can increase between 5 V to -5 Voltage, this is the exploration dynamics of the whole circuit, providing a greater value for trA2 and trA3.
+-. V2 or trA2 Encodes stability metrics for the circuit, the Maximum Voltage of V2 is around 0.48 -> 0.52 Voltage, V2 Acts as a stable basin of attractors that models stability or memory for the circuit.
+-. V3 or trA3 Encodes Growth, Which modelled how the Circuit can behave under growth of trA2, which provides another stable basin of attractors thus forming as a secondary memory, The maximum Voltage of trA3 resides around -0.83 -> -0.9 Voltage, this constant value provides the circuit a stable memory in which trA2 was able to provide as a stable projection for trA3 to form another stable basin of attractors.
+
 
 
 
