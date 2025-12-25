@@ -114,6 +114,10 @@ Epsitron is A Custom Transformer meant to Make Agents Adaptive To All environmen
 
 LaFoldBot is A Custom Meta-Helper that helps to Automate And Refined Logits, It Acts As A Coordinator to Supervised Logits or Probabilities, its presence acts like a backbone helper for FolderNet To Help FolderNet Refines its logits.
 
+# GeodeTransformer Class
+
+GeodeTransformer is A transformer that implements Geometric Attention that keeps both superlinear growth with logistic growth implicitly, the module inside contains the primary Equations of trAs, that was inspiredly derived from taylor expansion, thus it encodes implicit eigenvalues and improving stability while preserving memory and exploration.
+
 # geometricalSeeker Class
 
 geometricalseeker is a custom helper seekers that seeks stable divergence, conv, entropy, of scalars inside a matrix by exploring the probabilities of equilibrium in a theoretical dynamic  matrix interaction per training iteration. The mathematical Calculus derivatives used was riemannian equation.
