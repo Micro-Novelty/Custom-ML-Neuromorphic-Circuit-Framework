@@ -1,4 +1,4 @@
-# Custom-ML/Neuromorphic- Circuit-Framework
+# A. Custom-ML/Neuromorphic- Circuit-Framework
 This Framework Was Purely Custom Made by us (Me and my Friend after school) And we Have conducted some analytical test of It (lyapunov stability test, spectral radius, exploration vs exploitation evaluation), although, This repository contains the Whole Block of cellularAutomataNet, Epsitron Transformer, And EpsilonPolicy, etc to provide originality of development. Hope you understand the rigorous math and its Functions. Have Fun Checking and testing :)
 Creator = Anonimity X.11 / Indonesia 
 
@@ -149,6 +149,13 @@ Up to 0.4 -> 0.7
 
 B. explanation:
 The Empirical Results implies that the model Cant be evaluated by simple ML heuristics, it exhibits a stable dynamic between convergence and exploration with ensured stability from the mathematical equations. Despite a High convergence probabilities, the AI can Still Automatically Explores probabilities because of the topological noise given from the curvature sensitivity and initial basin projection.
+
+# B. Custom Neuromorphic Analog Circuit Framework
+
+1. The Neuromorphic Circuit Is A Circuit that used and manipulate the geometric properties of Noise to use it to form attractors and stable basin of exploration, thus forming the so called intelligence.
+
+
+
 
   
 
